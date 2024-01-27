@@ -3,9 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TrollsVsElves.Core.Extensions;
 using TrollsVsElves.Core.GameObjects;
-using TrollsVsElves.Core.Sprites;
 using TrollsVsElves.Core.Textures;
-using TrollsVsElves.Scripts.Components;
+using TrollsVsElves.Scripts.GameObjects;
 using TrollsVsElves.Scripts.Services;
 
 namespace TrollsVsElves.Scripts;
@@ -21,6 +20,7 @@ public class Scene : Game
 
     public Scene()
     {
+        _serviceCollection = new ServiceCollection();
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
@@ -40,8 +40,6 @@ public class Scene : Game
     protected override void Initialize()
     {
         Core.GameWindow.Update(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
-
-        _serviceCollection = new ServiceCollection();
 
         _serviceCollection
             .AddSingleton<SpriteBatch>()
@@ -68,14 +66,9 @@ public class Scene : Game
 
         _gameObjectCollection = provider.GetRequiredService<GameObjectCollection>();
 
-        var gameObject = provider.GetRequiredService<GameObject>();
-        var spriteRenderer = provider.GetRequiredService<SpriteRenderer>();
-        var moveWithCursorComponent = provider.GetRequiredService<MoveWithCursorComponent>();
+        var player = provider.GetRequiredService<Player>();
 
-        gameObject.AddComponent(spriteRenderer);
-        gameObject.AddComponent(moveWithCursorComponent);
-
-        _gameObjectCollection.AddGameObject(gameObject);
+        _gameObjectCollection.AddGameObject(player);
         _spriteBatch = provider.GetRequiredService<SpriteBatch>();
         _inputHandler = provider.GetRequiredService<InputHandlerService>();
     }

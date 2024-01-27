@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-
-namespace TrollsVsElves.Core;
+﻿namespace TrollsVsElves.Core;
 
 public static class GameWindow
 {

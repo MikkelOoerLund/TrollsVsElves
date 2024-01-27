@@ -1,15 +1,13 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using TrollsVsElves.Core.Components;
 using TrollsVsElves.Core.Lifetime;
 
 namespace TrollsVsElves.Core.Sprites
 {
-    public class SpriteRenderer : Component, Components.IDrawableComponent, ITransient
+    public class SpriteRenderer : Component, IDrawableComponent, ITransient
     {
         private Sprite _sprite;
         private SpriteBatch _spriteBatch;
-
 
         public SpriteRenderer(Sprite sprite, SpriteBatch spriteBatch)
         {

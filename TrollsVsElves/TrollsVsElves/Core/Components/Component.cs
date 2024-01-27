@@ -3,7 +3,7 @@ using TrollsVsElves.Core.Textures;
 
 namespace TrollsVsElves.Core.Components;
 
-public class Component
+public abstract class Component
 {
     public GameObject GameObject { get; set; }
     public Transform Transform => GameObject.Transform;
