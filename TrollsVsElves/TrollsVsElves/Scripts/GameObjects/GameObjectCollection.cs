@@ -11,19 +11,9 @@ namespace TrollsVsElves
             _gameObjects = new List<GameObject>();
         }
 
-
         public void AddGameObject(GameObject gameObject)
         {
             _gameObjects.Add(gameObject);
-        }
-
-
-        public void Update()
-        {
-            foreach (var item in _gameObjects)
-            {
-                item.Update();
-            }
         }
 
         public void Draw()
@@ -31,6 +21,14 @@ namespace TrollsVsElves
             foreach (var item in _gameObjects)
             {
                 item.Draw();
+            }
+        }
+
+        public void Update()
+        {
+            foreach (var item in _gameObjects)
+            {
+                item.Update();
             }
         }
     }

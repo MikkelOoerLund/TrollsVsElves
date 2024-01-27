@@ -3,20 +3,31 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System.Diagnostics;
-using System.Transactions;
 
 namespace TrollsVsElves
 {
+    public static class GameWindow
+    {
+        private static Vector2 _center;
+        private static int _height;
+        private static int _width;
 
+        public static Vector2 Center => _center;
+        public static int Height => _height;
+        public static int Width => _width;
 
-
-
+        public static void Update(int width, int height)
+        {
+            _width = width;
+            _height = height;
+            _center = new Vector2(width / 2, height / 2);
+        }
+    }
 
     public class MoveWithCursorComponent : Component, IUpdateable, ITransient
     {
-        private int _movementSpeed;
         private InputHandler _inputHandler;
+        private int _movementSpeed;
 
         public MoveWithCursorComponent(InputHandler inputHandler)
         {
@@ -35,7 +46,6 @@ namespace TrollsVsElves
             var distance = Vector2.Distance(mousePosition, position);
             direciton.Normalize();
 
-
             if (distance < 5)
             {
                 return;
@@ -48,43 +58,31 @@ namespace TrollsVsElves
         }
     }
 
-
-    public static class GameWindow
-    {
-        private static int _width;
-        private static int _height;
-        private static Vector2 _center;
-
-        public static int Width => _width;
-        public static int Height => _height;
-
-        public static Vector2 Center => _center;
-
-        public static void Update(int width, int height)
-        {
-            _width = width;
-            _height = height;
-            _center = new Vector2(width/2, height/2);
-        }
-    }
-
-
-
     public class Scene : Game
     {
         private GameObjectCollection _gameObjectCollection;
 
         private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
-
         private InputHandler _inputHandler;
         private IServiceCollection _serviceCollection;
+        private SpriteBatch _spriteBatch;
 
         public Scene()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+        }
+
+        protected override void Draw(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            _spriteBatch.Begin();
+            _gameObjectCollection.Draw();
+            _spriteBatch.End();
+
+            base.Draw(gameTime);
         }
 
         protected override void Initialize()
@@ -128,14 +126,12 @@ namespace TrollsVsElves
             _gameObjectCollection.AddGameObject(gameObject);
             _spriteBatch = provider.GetRequiredService<SpriteBatch>();
             _inputHandler = provider.GetRequiredService<InputHandler>();
-
         }
 
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
 
             Time.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -144,17 +140,6 @@ namespace TrollsVsElves
             _gameObjectCollection.Update();
 
             base.Update(gameTime);
-        }
-
-        protected override void Draw(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            _spriteBatch.Begin();
-            _gameObjectCollection.Draw();
-            _spriteBatch.End();
-
-            base.Draw(gameTime);
         }
     }
 }
