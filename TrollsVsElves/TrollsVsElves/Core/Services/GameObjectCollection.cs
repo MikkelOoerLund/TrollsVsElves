@@ -26,11 +26,11 @@ public class GameObjectCollection : ISingleton
         }
     }
 
-    public void Update()
+    public void Update(float deltaTime)
     {
         foreach (var item in _gameObjects)
         {
-            item.Update();
+            item.Update(deltaTime);
         }
     }
 }

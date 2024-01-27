@@ -16,13 +16,13 @@ public class MoveComponent : Component, IUpdateableComponent, ITransient
         _inputContainer = inputContainer;
     }
 
-    public void OnUpdate()
+    public void OnUpdate(float deltaTime)
     {
         var keyboardState = _inputContainer.KeyboardState;
 
-        if (keyboardState.IsKeyDown(Keys.W)) Transform.Translate(Vector2Extensions.Up * _movementSpeed * Time.DeltaTime);
-        if (keyboardState.IsKeyDown(Keys.S)) Transform.Translate(Vector2Extensions.Down * _movementSpeed * Time.DeltaTime);
-        if (keyboardState.IsKeyDown(Keys.A)) Transform.Translate(Vector2Extensions.Left * _movementSpeed * Time.DeltaTime);
-        if (keyboardState.IsKeyDown(Keys.D)) Transform.Translate(Vector2Extensions.Right * _movementSpeed * Time.DeltaTime);
+        if (keyboardState.IsKeyDown(Keys.W)) Transform.Translate(Vector2Extensions.Up * _movementSpeed * deltaTime);
+        if (keyboardState.IsKeyDown(Keys.S)) Transform.Translate(Vector2Extensions.Down * _movementSpeed * deltaTime);
+        if (keyboardState.IsKeyDown(Keys.A)) Transform.Translate(Vector2Extensions.Left * _movementSpeed * deltaTime);
+        if (keyboardState.IsKeyDown(Keys.D)) Transform.Translate(Vector2Extensions.Right * _movementSpeed * deltaTime);
     }
 }

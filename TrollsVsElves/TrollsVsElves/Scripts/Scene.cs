@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Input;
 using TrollsVsElves.Core;
 using TrollsVsElves.Core.Extensions;
 using TrollsVsElves.Core.Services;
-using TrollsVsElves.Core.Textures;
 using TrollsVsElves.Scripts.GameObjects;
 using TrollsVsElves.Scripts.Services;
 
@@ -78,11 +77,11 @@ public class Scene : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
-        Time.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+        var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
         _inputHandler.KeyboardState = Keyboard.GetState();
         _inputHandler.MouseState = Mouse.GetState();
-        _gameObjectCollection.Update();
+        _gameObjectCollection.Update(deltaTime);
 
         base.Update(gameTime);
     }

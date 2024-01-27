@@ -44,11 +44,11 @@ public class GameObject : ITransient
         }
     }
 
-    public void Update()
+    public void Update(float deltaTime)
     {
         foreach (var item in _updateables)
         {
-            item.OnUpdate();
+            item.OnUpdate(deltaTime);
         }
     }
 }
