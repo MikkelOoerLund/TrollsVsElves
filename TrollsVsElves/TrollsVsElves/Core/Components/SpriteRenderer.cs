@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using System;
+using System.Diagnostics;
+using Microsoft.Xna.Framework.Graphics;
 using TrollsVsElves.Core.Abstractions;
 
 namespace TrollsVsElves.Core.Components;
@@ -17,18 +19,24 @@ public class SpriteRenderer : Component, IDrawableComponent, ITransient
 
     public void OnDraw()
     {
-        var origin = Sprite.Origin;
         var texture = Sprite.Texture;
-        var sourceRectangle = texture.Bounds;
 
         var scale = Transform.Scale;
         var rotation = Transform.Rotation;
         var position = Transform.Position;
 
-        var halfWidth = texture.Width / 2;
-        var halfHeight = texture.Height / 2;
+        var size = new Vector2(texture.Width, texture.Height) * scale;
 
-        var spritePosition = new Vector2(position.X - halfWidth, position.Y - halfHeight);
-        _spriteBatch.Draw(texture, spritePosition, sourceRectangle, Color.White, rotation, origin, scale, SpriteEffects.None, 0);
+        var origin = size / 2;
+
+        var rect = new Rectangle
+        {
+            X = (int)Math.Round(position.X),
+            Y = (int)Math.Round(position.Y),
+            Width = (int)Math.Round(size.X),
+            Height = (int)Math.Round(size.Y)
+        };
+
+        _spriteBatch.Draw(texture, rect, null, Color.White, rotation, origin, SpriteEffects.None, 0f);
     }
 }

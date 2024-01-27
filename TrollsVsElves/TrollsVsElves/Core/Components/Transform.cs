@@ -24,4 +24,9 @@ public class Transform : ITransient
     {
         _position += translation;
     }
+
+    public void TranslateRotation(float rotation)
+    {
+        _rotation += rotation;
+    }
 }

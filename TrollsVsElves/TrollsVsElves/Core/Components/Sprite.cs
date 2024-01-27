@@ -10,7 +10,5 @@ public class Sprite : ITransient
         Texture = defaultTexture;
     }
 
-    public Vector2 Origin { get; set; } = Vector2.Zero;
-
     public Texture2D Texture { get; set; }
 }
