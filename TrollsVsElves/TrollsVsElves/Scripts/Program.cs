@@ -1,17 +1,10 @@
-﻿
+﻿namespace TrollsVsElves.Scripts;
 
-
-
-
-namespace TrollsVsElves
+internal class Program
 {
-
-    class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
-        {
-            using var game = new Scene();
-            game.Run();
-        }
+        using var game = new Scene();
+        game.Run();
     }
 }
