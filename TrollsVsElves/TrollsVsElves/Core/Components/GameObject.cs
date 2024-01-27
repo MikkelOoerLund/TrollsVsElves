@@ -42,6 +42,8 @@ public class GameObject : ITransient
         {
             item.OnDraw();
         }
+
+        OnDraw();
     }
 
     public void Update(float deltaTime)
@@ -50,5 +52,10 @@ public class GameObject : ITransient
         {
             item.OnUpdate(deltaTime);
         }
+
+        OnUpdate(deltaTime);
     }
+    
+    protected virtual void OnDraw() { }
+    protected virtual void OnUpdate(float deltaTime) { }
 }

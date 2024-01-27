@@ -17,13 +17,13 @@ public class RotateComponent : Component, IUpdateableComponent, ITransient
 
     public void OnUpdate(float deltaTime)
     {
-        if (_inputHandler.KeyboardState.IsKeyDown(Keys.A)) 
-        { 
-            Transform.TranslateRotation(1 * deltaTime); 
+        if (_inputHandler.KeyboardState.IsKeyDown(Keys.A))
+        {
+            Transform.TranslateRotation(1 * deltaTime);
         }
-        if (_inputHandler.KeyboardState.IsKeyDown(Keys.D)) 
-        { 
-            Transform.TranslateRotation(-1 * deltaTime); 
+        if (_inputHandler.KeyboardState.IsKeyDown(Keys.D))
+        {
+            Transform.TranslateRotation(-1 * deltaTime);
         }
     }
 }

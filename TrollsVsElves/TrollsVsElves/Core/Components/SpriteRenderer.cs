@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using TrollsVsElves.Core.Abstractions;
 
 namespace TrollsVsElves.Core.Components;
@@ -7,6 +8,8 @@ namespace TrollsVsElves.Core.Components;
 public class SpriteRenderer : Component, IDrawableComponent, ITransient
 {
     private readonly SpriteBatch _spriteBatch;
+
+    public Color Color { get; set; } = Color.White;
 
     public SpriteRenderer(Sprite sprite, SpriteBatch spriteBatch)
     {
@@ -16,26 +19,28 @@ public class SpriteRenderer : Component, IDrawableComponent, ITransient
 
     public Sprite Sprite { get; }
 
+    public Vector2 Size => (Size2)Sprite.Texture.Bounds.Size * Transform.Scale;
+
+    public Vector2 Origin => Size / 2;
+
     public void OnDraw()
     {
-        var texture = Sprite.Texture;
-
-        var scale = Transform.Scale;
-        var rotation = Transform.Rotation;
-        var position = Transform.Position;
-
-        var size = new Vector2(texture.Width, texture.Height) * scale;
-
-        var origin = size / 2;
-
         var rect = new Rectangle
         {
-            X = (int)Math.Round(position.X),
-            Y = (int)Math.Round(position.Y),
-            Width = (int)Math.Round(size.X),
-            Height = (int)Math.Round(size.Y)
+            X = (int)Math.Round(Transform.Position.X),
+            Y = (int)Math.Round(Transform.Position.Y),
+            Width = (int)Math.Round(Size.X),
+            Height = (int)Math.Round(Size.Y)
         };
 
-        _spriteBatch.Draw(texture, rect, null, Color.White, rotation, origin, SpriteEffects.None, 0f);
+        _spriteBatch.Draw(
+            Sprite.Texture, 
+            rect, 
+            null, 
+            Color, 
+            Transform.Rotation, 
+            Origin, 
+            SpriteEffects.None, 
+            0f);
     }
 }
