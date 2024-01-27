@@ -2,7 +2,7 @@
 using System.Reflection;
 
 using Microsoft.Extensions.DependencyInjection;
-using TrollsVsElves.Core.Lifetime;
+using TrollsVsElves.Core.Abstractions;
 
 namespace TrollsVsElves.Core.Extensions
 {
@@ -17,6 +17,20 @@ namespace TrollsVsElves.Core.Extensions
             foreach (var transient in transients)
             {
                 services.AddTransient(transient);
+            }
+
+            return services;
+        }
+
+        public static IServiceCollection AddSingletonServices(this IServiceCollection services)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+
+            var singletons = assembly.GetTypes().Where(x => x.IsAssignableTo(typeof(ISingleton)) && !x.IsInterface && !x.IsAbstract);
+
+            foreach (var singleton in singletons)
+            {
+                services.AddSingleton(singleton);
             }
 
             return services;

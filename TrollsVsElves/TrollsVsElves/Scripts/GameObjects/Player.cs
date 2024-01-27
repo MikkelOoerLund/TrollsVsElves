@@ -1,31 +1,29 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Xna.Framework.Graphics;
-using TrollsVsElves.Core.GameObjects;
-using TrollsVsElves.Core.Sprites;
-using TrollsVsElves.Core.Textures;
+using TrollsVsElves.Core.Abstractions;
+using TrollsVsElves.Core.Components;
+using TrollsVsElves.Core.Services;
 using TrollsVsElves.Scripts.Components;
 
-namespace TrollsVsElves.Scripts.GameObjects
+namespace TrollsVsElves.Scripts.GameObjects;
+
+public class Player : GameObject, IUpdateableComponent
 {
-    public class Player : GameObject
+    private readonly SpriteRenderer _spriteRenderer;
+    private readonly MoveWithCursorComponent _moveWithCursorComponent;
+
+    public Player(IServiceProvider services)
     {
-        private readonly SpriteRenderer _spriteRenderer;
+        _spriteRenderer = AddComponent(services.GetRequiredService<SpriteRenderer>());
+        _moveWithCursorComponent = AddComponent(services.GetRequiredService<MoveWithCursorComponent>());
 
-        public Player(IServiceProvider services, Transform transform) : base(services, transform)
-        {
-            var texture = ServiceProvider.GetRequiredKeyedService<Texture2D>("Square");
+        var textureFactory = services.GetRequiredService<TextureFactory>();
 
+        _spriteRenderer.Sprite.Texture = textureFactory.CreateIfNotExists("Sprites/Square");
+    }
 
-
-            var sprite = new Sprite(texture, default);
-            _spriteRenderer = new SpriteRenderer(sprite, services.GetRequiredService<SpriteBatch>());
-
-            var spriteRenderer = ServiceProvider.GetRequiredService<SpriteRenderer>();
-            var moveWithCursorComponent = ServiceProvider.GetRequiredService<MoveWithCursorComponent>();
-
-            AddComponent(spriteRenderer);
-            AddComponent(moveWithCursorComponent);
-        }
+    public void OnUpdate()
+    {
+        
     }
 }

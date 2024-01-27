@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Input;
-using TrollsVsElves.Core.Components;
+using TrollsVsElves.Core.Abstractions;
 using TrollsVsElves.Core.Extensions;
-using TrollsVsElves.Core.Lifetime;
 using TrollsVsElves.Scripts.Services;
 
 namespace TrollsVsElves.Scripts.Components;

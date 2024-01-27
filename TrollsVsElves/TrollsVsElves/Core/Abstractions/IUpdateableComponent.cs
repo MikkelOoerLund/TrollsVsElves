@@ -1,4 +1,4 @@
-﻿namespace TrollsVsElves.Core.Components;
+﻿namespace TrollsVsElves.Core.Abstractions;
 
 public interface IUpdateableComponent
 {

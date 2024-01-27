@@ -1,13 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using TrollsVsElves.Core.Components;
-using TrollsVsElves.Core.Lifetime;
+using TrollsVsElves.Core.Abstractions;
 using TrollsVsElves.Core.Textures;
 using TrollsVsElves.Scripts.Services;
 
 namespace TrollsVsElves.Scripts.Components;
 
-public class MoveWithCursorComponent : Component, Core.Components.IUpdateableComponent, ITransient
+public class MoveWithCursorComponent : Component, IUpdateableComponent, ITransient
 {
     private InputHandlerService _inputHandler;
     private int _movementSpeed;

@@ -1,6 +1,6 @@
 ﻿namespace TrollsVsElves.Core;
 
-public static class GameWindow
+public static class GameWindowData
 {
     private static Vector2 _center;
     private static int _height;
