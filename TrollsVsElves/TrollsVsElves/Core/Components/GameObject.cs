@@ -1,25 +1,22 @@
 ﻿using System.Collections.Generic;
-using TrollsVsElves.Core.Components;
-using TrollsVsElves.Core.Lifetime;
-using TrollsVsElves.Core.Textures;
+using TrollsVsElves.Core.Abstractions;
 
-namespace TrollsVsElves.Core.GameObjects;
+namespace TrollsVsElves.Core.Components;
 
 public class GameObject : ITransient
 {
     private List<IDrawableComponent> _drawables;
     private List<IUpdateableComponent> _updateables;
 
-    public GameObject(Transform transform)
+    public GameObject()
     {
-        Transform = transform;
         _drawables = new List<IDrawableComponent>();
         _updateables = new List<IUpdateableComponent>();
     }
 
-    public Transform Transform { get; }
+    public Transform Transform { get; init; } = new Transform();
 
-    public void AddComponent<T>(T component) where T : Component
+    public T AddComponent<T>(T component) where T : Component
     {
         component.GameObject = this;
 
@@ -35,6 +32,8 @@ public class GameObject : ITransient
         {
             _updateables.Add(updateable);
         }
+
+        return component;
     }
 
     public void Draw()
@@ -45,11 +44,11 @@ public class GameObject : ITransient
         }
     }
 
-    public void Update()
+    public void Update(float deltaTime)
     {
         foreach (var item in _updateables)
         {
-            item.OnUpdate();
+            item.OnUpdate(deltaTime);
         }
     }
 }

@@ -1,7 +1,6 @@
-﻿using TrollsVsElves.Core.GameObjects;
-using TrollsVsElves.Core.Textures;
+﻿using TrollsVsElves.Core.Components;
 
-namespace TrollsVsElves.Core.Components;
+namespace TrollsVsElves.Core.Abstractions;
 
 public abstract class Component
 {

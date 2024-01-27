@@ -1,13 +1,10 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using TrollsVsElves.Core.Components;
-using TrollsVsElves.Core.Lifetime;
-using TrollsVsElves.Core.Textures;
+﻿using Microsoft.Xna.Framework.Input;
+using TrollsVsElves.Core.Abstractions;
 using TrollsVsElves.Scripts.Services;
 
 namespace TrollsVsElves.Scripts.Components;
 
-public class MoveWithCursorComponent : Component, Core.Components.IUpdateableComponent, ITransient
+public class MoveWithCursorComponent : Component, IUpdateableComponent, ITransient
 {
     private InputHandlerService _inputHandler;
     private int _movementSpeed;
@@ -18,7 +15,7 @@ public class MoveWithCursorComponent : Component, Core.Components.IUpdateableCom
         _inputHandler = inputHandler;
     }
 
-    public void OnUpdate()
+    public void OnUpdate(float deltaTime)
     {
         var mouseState = _inputHandler.MouseState;
         var mousePosition = new Vector2(mouseState.X, mouseState.Y);
@@ -36,7 +33,7 @@ public class MoveWithCursorComponent : Component, Core.Components.IUpdateableCom
 
         if (mouseState.RightButton == ButtonState.Pressed)
         {
-            Transform.Translate(direciton * _movementSpeed * Time.DeltaTime);
+            Transform.Translate(direciton * _movementSpeed * deltaTime);
         }
     }
 }

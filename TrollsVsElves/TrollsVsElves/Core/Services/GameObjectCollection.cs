@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using TrollsVsElves.Core.Abstractions;
+using TrollsVsElves.Core.Components;
 
-namespace TrollsVsElves.Core.GameObjects;
+namespace TrollsVsElves.Core.Services;
 
-public class GameObjectCollection
+public class GameObjectCollection : ISingleton
 {
     private List<GameObject> _gameObjects;
 
@@ -24,11 +26,11 @@ public class GameObjectCollection
         }
     }
 
-    public void Update()
+    public void Update(float deltaTime)
     {
         foreach (var item in _gameObjects)
         {
-            item.Update();
+            item.Update(deltaTime);
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using TrollsVsElves.Core;
 using TrollsVsElves.Core.Extensions;
-using TrollsVsElves.Core.GameObjects;
-using TrollsVsElves.Core.Textures;
+using TrollsVsElves.Core.Services;
 using TrollsVsElves.Scripts.GameObjects;
 using TrollsVsElves.Scripts.Services;
 
@@ -39,15 +39,13 @@ public class Scene : Game
 
     protected override void Initialize()
     {
-        Core.GameWindow.Update(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
+        GameWindowData.Update(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
 
         _serviceCollection
             .AddSingleton<SpriteBatch>()
-            .AddSingleton<TextureFactory>()
-            .AddSingleton<InputHandlerService>()
-            .AddSingleton<GameObjectCollection>()
             .AddSingleton(Content)
-            .AddSingleton(GraphicsDevice);
+            .AddSingleton(GraphicsDevice)
+            .AddSingletonServices();
 
         _serviceCollection
             .AddTransientServices();
@@ -69,6 +67,7 @@ public class Scene : Game
         var player = provider.GetRequiredService<Player>();
 
         _gameObjectCollection.AddGameObject(player);
+
         _spriteBatch = provider.GetRequiredService<SpriteBatch>();
         _inputHandler = provider.GetRequiredService<InputHandlerService>();
     }
@@ -78,11 +77,11 @@ public class Scene : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
-        Time.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+        var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
         _inputHandler.KeyboardState = Keyboard.GetState();
         _inputHandler.MouseState = Mouse.GetState();
-        _gameObjectCollection.Update();
+        _gameObjectCollection.Update(deltaTime);
 
         base.Update(gameTime);
     }
