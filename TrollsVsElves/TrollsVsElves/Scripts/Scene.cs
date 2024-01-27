@@ -1,145 +1,96 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using TrollsVsElves.Core.Extensions;
+using TrollsVsElves.Core.GameObjects;
+using TrollsVsElves.Core.Sprites;
+using TrollsVsElves.Core.Textures;
+using TrollsVsElves.Scripts.Components;
+using TrollsVsElves.Scripts.Services;
 
-namespace TrollsVsElves
+namespace TrollsVsElves.Scripts;
+
+public class Scene : Game
 {
-    public static class GameWindow
+    private GameObjectCollection _gameObjectCollection;
+
+    private GraphicsDeviceManager _graphics;
+    private InputHandlerService _inputHandler;
+    private IServiceCollection _serviceCollection;
+    private SpriteBatch _spriteBatch;
+
+    public Scene()
     {
-        private static Vector2 _center;
-        private static int _height;
-        private static int _width;
-
-        public static Vector2 Center => _center;
-        public static int Height => _height;
-        public static int Width => _width;
-
-        public static void Update(int width, int height)
-        {
-            _width = width;
-            _height = height;
-            _center = new Vector2(width / 2, height / 2);
-        }
+        _graphics = new GraphicsDeviceManager(this);
+        Content.RootDirectory = "Content";
+        IsMouseVisible = true;
     }
 
-    public class MoveWithCursorComponent : Component, IUpdateable, ITransient
+    protected override void Draw(GameTime gameTime)
     {
-        private InputHandler _inputHandler;
-        private int _movementSpeed;
+        GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        public MoveWithCursorComponent(InputHandler inputHandler)
-        {
-            _movementSpeed = 400;
-            _inputHandler = inputHandler;
-        }
+        _spriteBatch.Begin();
+        _gameObjectCollection.Draw();
+        _spriteBatch.End();
 
-        public void OnUpdate()
-        {
-            var mouseState = _inputHandler.MouseState;
-            var mousePosition = new Vector2(mouseState.X, mouseState.Y);
-
-            var position = Transform.Position;
-            var direciton = mousePosition - position;
-
-            var distance = Vector2.Distance(mousePosition, position);
-            direciton.Normalize();
-
-            if (distance < 5)
-            {
-                return;
-            }
-
-            if (mouseState.RightButton == ButtonState.Pressed)
-            {
-                Transform.Translate(direciton * _movementSpeed * Time.DeltaTime);
-            }
-        }
+        base.Draw(gameTime);
     }
 
-    public class Scene : Game
+    protected override void Initialize()
     {
-        private GameObjectCollection _gameObjectCollection;
+        Core.GameWindow.Update(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
 
-        private GraphicsDeviceManager _graphics;
-        private InputHandler _inputHandler;
-        private IServiceCollection _serviceCollection;
-        private SpriteBatch _spriteBatch;
+        _serviceCollection = new ServiceCollection();
 
-        public Scene()
+        _serviceCollection
+            .AddSingleton<SpriteBatch>()
+            .AddSingleton<TextureFactory>()
+            .AddSingleton<InputHandlerService>()
+            .AddSingleton<GameObjectCollection>()
+            .AddSingleton(Content)
+            .AddSingleton(GraphicsDevice);
+
+        _serviceCollection
+            .AddTransientServices();
+
+        base.Initialize();
+    }
+
+    protected override void LoadContent()
+    {
+        _serviceCollection.AddTransient((provider) =>
         {
-            _graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-            IsMouseVisible = true;
-        }
+            return Content.Load<Texture2D>("Sprites/Square");
+        });
 
-        protected override void Draw(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+        var provider = _serviceCollection.BuildServiceProvider();
 
-            _spriteBatch.Begin();
-            _gameObjectCollection.Draw();
-            _spriteBatch.End();
+        _gameObjectCollection = provider.GetRequiredService<GameObjectCollection>();
 
-            base.Draw(gameTime);
-        }
+        var gameObject = provider.GetRequiredService<GameObject>();
+        var spriteRenderer = provider.GetRequiredService<SpriteRenderer>();
+        var moveWithCursorComponent = provider.GetRequiredService<MoveWithCursorComponent>();
 
-        protected override void Initialize()
-        {
-            GameWindow.Update(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
+        gameObject.AddComponent(spriteRenderer);
+        gameObject.AddComponent(moveWithCursorComponent);
 
-            _serviceCollection = new ServiceCollection();
+        _gameObjectCollection.AddGameObject(gameObject);
+        _spriteBatch = provider.GetRequiredService<SpriteBatch>();
+        _inputHandler = provider.GetRequiredService<InputHandlerService>();
+    }
 
-            _serviceCollection
-                .AddSingleton<SpriteBatch>()
-                .AddSingleton<TextureFactory>()
-                .AddSingleton<InputHandler>()
-                .AddSingleton<GameObjectCollection>()
-                .AddSingleton<ContentManager>(Content)
-                .AddSingleton<GraphicsDevice>(GraphicsDevice);
+    protected override void Update(GameTime gameTime)
+    {
+        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            Exit();
 
-            _serviceCollection
-                .AddTransientServices();
+        Time.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            base.Initialize();
-        }
+        _inputHandler.KeyboardState = Keyboard.GetState();
+        _inputHandler.MouseState = Mouse.GetState();
+        _gameObjectCollection.Update();
 
-        protected override void LoadContent()
-        {
-            _serviceCollection.AddTransient<Texture2D>((provider) =>
-            {
-                return Content.Load<Texture2D>("Sprites/Square");
-            });
-
-            var provider = _serviceCollection.BuildServiceProvider();
-
-            _gameObjectCollection = provider.GetRequiredService<GameObjectCollection>();
-
-            var gameObject = provider.GetRequiredService<GameObject>();
-            var spriteRenderer = provider.GetRequiredService<SpriteRenderer>();
-            var moveWithCursorComponent = provider.GetRequiredService<MoveWithCursorComponent>();
-
-            gameObject.AddComponent(spriteRenderer);
-            gameObject.AddComponent(moveWithCursorComponent);
-
-            _gameObjectCollection.AddGameObject(gameObject);
-            _spriteBatch = provider.GetRequiredService<SpriteBatch>();
-            _inputHandler = provider.GetRequiredService<InputHandler>();
-        }
-
-        protected override void Update(GameTime gameTime)
-        {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
-            Time.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            _inputHandler.KeyboardState = Keyboard.GetState();
-            _inputHandler.MouseState = Mouse.GetState();
-            _gameObjectCollection.Update();
-
-            base.Update(gameTime);
-        }
+        base.Update(gameTime);
     }
 }

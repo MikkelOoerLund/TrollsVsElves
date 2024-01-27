@@ -1,19 +1,13 @@
-﻿using Microsoft.Xna.Framework;
+﻿using TrollsVsElves.Core.Lifetime;
 
-namespace TrollsVsElves
+namespace TrollsVsElves.Core.Textures
 {
     public class Transform : ITransient
     {
+        private Vector2 _position;
         private float _rotation;
 
         private Vector2 _scale;
-        private Vector2 _position;
-
-
-        public float Rotation => _rotation;
-
-        public Vector2 Scale => _scale;
-        public Vector2 Position => _position;
 
         public Transform()
         {
@@ -21,13 +15,14 @@ namespace TrollsVsElves
             _position = Vector2.Zero;
         }
 
+        public Vector2 Position => _position;
+        public float Rotation => _rotation;
+
+        public Vector2 Scale => _scale;
 
         public void Translate(Vector2 translation)
         {
             _position += translation;
         }
-
-
-
     }
 }

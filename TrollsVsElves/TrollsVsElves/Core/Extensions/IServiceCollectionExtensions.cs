@@ -1,8 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
 
-namespace TrollsVsElves
+using Microsoft.Extensions.DependencyInjection;
+using TrollsVsElves.Core.Lifetime;
+
+namespace TrollsVsElves.Core.Extensions
 {
     public static class IServiceCollectionExtensions
     {

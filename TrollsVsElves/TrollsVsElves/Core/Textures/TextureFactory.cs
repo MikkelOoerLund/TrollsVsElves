@@ -1,8 +1,9 @@
-﻿using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace TrollsVsElves
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+
+namespace TrollsVsElves.Core.Textures
 {
     public class TextureFactory
     {
