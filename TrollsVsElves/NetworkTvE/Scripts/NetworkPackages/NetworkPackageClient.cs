@@ -1,32 +1,9 @@
 ﻿using MessagePack;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace NetworkTvE.Scripts
 {
-    public class NetworkPackageListener
-    {
-        private UdpListenerWrapper _udpListenerWrapper;
-
-        public NetworkPackageListener(UdpListenerWrapper udpListenerWrapper)
-        {
-            _udpListenerWrapper = udpListenerWrapper;
-        }
-
-        public void SendNetworkPackage(NetworkPackage networkPackage, IPEndPoint endPoint)
-        {
-            var bytes = MessagePackSerializer.Serialize<NetworkPackage>(networkPackage);
-            _udpListenerWrapper.Send(bytes, endPoint);
-        }
-
-        public (NetworkPackage, IPEndPoint) RecieveNetworkPackage()
-        {
-            var (bytes, remoteEndPoint) = _udpListenerWrapper.Recieve();
-            var networkPackage = MessagePackSerializer.Deserialize<NetworkPackage>(bytes);
-            return (networkPackage, remoteEndPoint);
-        }
-    }
-
-
     public class NetworkPackageClient
     {
         private UdpClientWrapper _udpClientWrapper;
@@ -47,5 +24,28 @@ namespace NetworkTvE.Scripts
             var bytes = _udpClientWrapper.Recieve();
             return MessagePackSerializer.Deserialize<NetworkPackage>(bytes);
         }
+
+        public async Task SendNetworkPackageAsync(NetworkPackage networkPackage)
+        {
+            var bytes = MessagePackSerializer.Serialize<NetworkPackage>(networkPackage);
+            await _udpClientWrapper.SendAsync(bytes);
+        }
+
+        public async Task SendNetworkPackageAsync(NetworkPackage networkPackage, IPEndPoint remoteEndPoint)
+        {
+            var bytes = MessagePackSerializer.Serialize<NetworkPackage>(networkPackage);
+            await _udpClientWrapper.SendAsync(bytes, remoteEndPoint);
+        }
+
+
+
+        public async Task<NetworkPackage> ReceiveNetworkPackageAsync()
+        {
+            var result = await _udpClientWrapper.RecieveAsync();
+            var networkPackage = MessagePackSerializer.Deserialize<NetworkPackage>(result.Buffer);
+            networkPackage.RemoteEndPoint = result.RemoteEndPoint;
+            return networkPackage;
+        }
+
     }
 }

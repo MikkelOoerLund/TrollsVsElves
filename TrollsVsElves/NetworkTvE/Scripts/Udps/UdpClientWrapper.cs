@@ -19,6 +19,13 @@ namespace NetworkTvE.Scripts
             _remoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
         }
 
+        public UdpClientWrapper(int port)
+        {
+            _udpClient = new UdpClient(port);
+            _remoteIpEndPoint = new IPEndPoint(IPAddress.Any, port);
+        }
+
+
         public void Connect(string ipAddress, int port)
         {
             _udpClient.Connect(ipAddress, port);
@@ -29,9 +36,26 @@ namespace NetworkTvE.Scripts
             _udpClient.Send(bytes, bytes.Length);
         }
 
+        public async Task SendAsync(byte[] bytes)
+        {
+            await _udpClient.SendAsync(bytes, bytes.Length);
+        }
+
+
+        public async Task SendAsync(byte[] bytes, IPEndPoint remoteEndPoint)
+        {
+            await _udpClient.SendAsync(bytes, bytes.Length, remoteEndPoint);
+        }
+
+
         public byte[] Recieve()
         {
             return _udpClient.Receive(ref _remoteIpEndPoint);
+        }
+
+        public async Task<UdpReceiveResult> RecieveAsync()
+        {
+            return await _udpClient.ReceiveAsync();
         }
 
         public void Dispose()
