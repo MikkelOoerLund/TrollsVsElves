@@ -11,26 +11,49 @@ namespace TestClient
 {
     class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            var client = new UdpClientWrapper();
+            var udpClient = new UdpClientWrapper();
+            var networkClient = new NetworkPackageClient(udpClient);
 
-            client.Connect(IPAddress.Loopback.ToString(), 12000);
+            udpClient.Connect(IPAddress.Loopback.ToString(), 12000);
 
+            var networkPackage = new NetworkPackage()
+            {
+                Type = NetworkPackageType.CreateExampleDataRequest,
+            };
 
-            var networkClient = new NetworkPackageClient(client);
-            var exampleClient = new ExampleClient(networkClient);
-
-            var createRequest = new CreateExampleDataRequest { Message = "Hegne" };
-            exampleClient.CreateExampleData(createRequest);
-
-
-            var response = networkClient.RecieveNetworkPackage();
+            await networkClient.SendNetworkPackageAsync(networkPackage);
 
 
-            Console.WriteLine(response.Type);
+            var response = await networkClient.ReceiveNetworkPackageAsync();
 
-            Console.ReadLine();
+
         }
+
+
+        public static void Sync()
+        {
+
+            //var client = new UdpClientWrapper();
+
+            //client.Connect(IPAddress.Loopback.ToString(), 12000);
+
+
+            //var networkClient = new NetworkPackageClient(client);
+            //var exampleClient = new ExampleClient(networkClient);
+
+            //var createRequest = new CreateExampleDataRequest { Message = "Hegne" };
+            //exampleClient.CreateExampleData(createRequest);
+
+
+            //var response = networkClient.RecieveNetworkPackage();
+
+
+            //Console.WriteLine(response.Type);
+
+            //Console.ReadLine();
+        }
+
     }
 }

@@ -12,29 +12,51 @@ namespace TrollsVsElvesServer
 
     class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            var listener = new UdpListenerWrapper(12000);
-            var networkListener = new NetworkPackageListener(listener);
+            var udpListener = new UdpClientWrapper(12000);
+            var networkListener = new NetworkPackageClient(udpListener);
 
-            var (request, fromEndPoint) = networkListener.RecieveNetworkPackage();
-
-            if (request.Type == NetworkPackageType.CreateExampleDataRequest)
+            while (true)
             {
-                var createResponse = new CreateExampleDataResponse { Message = "Response" };
+                var networkPackage = await networkListener.ReceiveNetworkPackageAsync();
+                var remoteEndPoint = networkPackage.RemoteEndPoint;
 
-                var response = new NetworkPackage()
+                if (networkPackage.Type == NetworkPackageType.CreateExampleDataRequest)
                 {
-                    Type = NetworkPackageType.CreateExampleDataResponse,
-                };
+                    var response = new NetworkPackage()
+                    {
+                        Type = NetworkPackageType.CreateExampleDataResponse,
+                    };
 
-                response.ConsumeData(createResponse);
+                    await networkListener.SendNetworkPackageAsync(response, remoteEndPoint);
+                }
 
-                networkListener.SendNetworkPackage(response, fromEndPoint);
             }
+        }
 
 
 
+        private static void Sync()
+        {
+            //var listener = new UdpListenerWrapper(12000);
+            //var networkListener = new NetworkPackageListener(listener);
+
+            //var (request, fromEndPoint) = networkListener.RecieveNetworkPackage();
+
+            //if (request.Type == NetworkPackageType.CreateExampleDataRequest)
+            //{
+            //    var createResponse = new CreateExampleDataResponse { Message = "Response" };
+
+            //    var response = new NetworkPackage()
+            //    {
+            //        Type = NetworkPackageType.CreateExampleDataResponse,
+            //    };
+
+            //    response.ConsumeData(createResponse);
+
+            //    networkListener.SendNetworkPackage(response, fromEndPoint);
+            //}
         }
     }
 }

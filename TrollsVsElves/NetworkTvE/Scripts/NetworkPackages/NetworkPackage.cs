@@ -1,4 +1,5 @@
 ﻿using MessagePack;
+using System.Net;
 
 namespace NetworkTvE.Scripts
 {
@@ -9,6 +10,8 @@ namespace NetworkTvE.Scripts
         [Key(1)] public string Message { get; set; }
         [Key(2)] public byte[] Data { get; set; }
 
+
+        [IgnoreMember] public IPEndPoint RemoteEndPoint { get; set; }
 
         public T GetData<T>()
         {
