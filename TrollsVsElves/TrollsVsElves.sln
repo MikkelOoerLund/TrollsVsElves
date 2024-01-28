@@ -1,9 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.33529.622
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrollsVsElves", "TrollsVsElves\TrollsVsElves.csproj", "{78BBD92B-640A-4FC6-9C16-887F4300F920}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrollsVsElves", "TrollsVsElves\TrollsVsElves.csproj", "{78BBD92B-640A-4FC6-9C16-887F4300F920}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkTvE", "NetworkTvE\NetworkTvE.csproj", "{9B581C17-A0F6-4106-B98B-278533432460}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrollsVsElvesServer", "TrollsVsElvesServer\TrollsVsElvesServer.csproj", "{E4AB949C-0B56-46E7-9B8D-60C3F5A59AFC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestClient", "TestClient\TestClient.csproj", "{6579B789-CFBC-4787-B795-F0B2750A446A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{78BBD92B-640A-4FC6-9C16-887F4300F920}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78BBD92B-640A-4FC6-9C16-887F4300F920}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78BBD92B-640A-4FC6-9C16-887F4300F920}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B581C17-A0F6-4106-B98B-278533432460}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B581C17-A0F6-4106-B98B-278533432460}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B581C17-A0F6-4106-B98B-278533432460}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B581C17-A0F6-4106-B98B-278533432460}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4AB949C-0B56-46E7-9B8D-60C3F5A59AFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4AB949C-0B56-46E7-9B8D-60C3F5A59AFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4AB949C-0B56-46E7-9B8D-60C3F5A59AFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4AB949C-0B56-46E7-9B8D-60C3F5A59AFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6579B789-CFBC-4787-B795-F0B2750A446A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6579B789-CFBC-4787-B795-F0B2750A446A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6579B789-CFBC-4787-B795-F0B2750A446A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6579B789-CFBC-4787-B795-F0B2750A446A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
