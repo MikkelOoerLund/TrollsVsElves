@@ -27,33 +27,6 @@ namespace TestClient
 
 
             var response = await networkClient.ReceiveNetworkPackageAsync();
-
-
         }
-
-
-        public static void Sync()
-        {
-
-            //var client = new UdpClientWrapper();
-
-            //client.Connect(IPAddress.Loopback.ToString(), 12000);
-
-
-            //var networkClient = new NetworkPackageClient(client);
-            //var exampleClient = new ExampleClient(networkClient);
-
-            //var createRequest = new CreateExampleDataRequest { Message = "Hegne" };
-            //exampleClient.CreateExampleData(createRequest);
-
-
-            //var response = networkClient.RecieveNetworkPackage();
-
-
-            //Console.WriteLine(response.Type);
-
-            //Console.ReadLine();
-        }
-
     }
 }
