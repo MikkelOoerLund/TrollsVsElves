@@ -15,7 +15,7 @@ public class RotateComponent : Component, IUpdateableComponent, ITransient
 
     public float RotateSpeed { get; set; }
 
-    public void OnUpdate(float deltaTime)
+    public void Update(float deltaTime)
     {
         if (_inputHandler.KeyboardState.IsKeyDown(Keys.A))
         {

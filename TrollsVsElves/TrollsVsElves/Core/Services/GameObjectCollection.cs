@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TrollsVsElves.Core.Abstractions;
 using TrollsVsElves.Core.Components;
 
@@ -16,6 +17,19 @@ public class GameObjectCollection : ISingleton
     public void AddGameObject(GameObject gameObject)
     {
         _gameObjects.Add(gameObject);
+    }
+
+    public GameObject GetGameObjectWithName(string name)
+    {
+        foreach (var gameObject in _gameObjects)
+        {
+            if (gameObject.Name == name)
+            {
+                return gameObject;
+            }
+        }
+
+        throw new Exception($"GameObject with name: {name} not found");
     }
 
     public void Draw()

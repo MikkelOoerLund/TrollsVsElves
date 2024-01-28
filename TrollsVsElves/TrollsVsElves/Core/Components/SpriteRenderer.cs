@@ -23,7 +23,7 @@ public class SpriteRenderer : Component, IDrawableComponent, ITransient
 
     public Vector2 Origin => Size / 2;
 
-    public void OnDraw()
+    public void Draw()
     {
         var rect = new Rectangle
         {

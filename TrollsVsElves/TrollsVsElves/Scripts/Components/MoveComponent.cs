@@ -16,7 +16,7 @@ public class MoveComponent : Component, IUpdateableComponent, ITransient
         _inputContainer = inputContainer;
     }
 
-    public void OnUpdate(float deltaTime)
+    public void Update(float deltaTime)
     {
         var keyboardState = _inputContainer.KeyboardState;
 
