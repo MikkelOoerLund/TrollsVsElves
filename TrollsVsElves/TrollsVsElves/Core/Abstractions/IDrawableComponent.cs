@@ -2,5 +2,5 @@
 
 public interface IDrawableComponent
 {
-    void OnDraw();
+    void Draw();
 }

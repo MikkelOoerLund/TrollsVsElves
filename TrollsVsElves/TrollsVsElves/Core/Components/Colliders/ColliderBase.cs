@@ -27,7 +27,7 @@ public abstract class ColliderBase : Component, IUpdateableComponent, ICollision
 
     public abstract void OnCollision(CollisionEventArgs collisionInfo);
 
-    public virtual void OnUpdate(float deltaTime)
+    public virtual void Update(float deltaTime)
     {
         Bounds.Position = Transform.Position - origin;
     }

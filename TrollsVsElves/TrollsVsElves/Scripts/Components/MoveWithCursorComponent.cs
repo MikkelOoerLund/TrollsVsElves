@@ -15,7 +15,7 @@ public class MoveWithCursorComponent : Component, IUpdateableComponent, ITransie
         _inputHandler = inputHandler;
     }
 
-    public void OnUpdate(float deltaTime)
+    public void Update(float deltaTime)
     {
         var mouseState = _inputHandler.MouseState;
         var mousePosition = new Vector2(mouseState.X, mouseState.Y);

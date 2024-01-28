@@ -1,15 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using TrollsVsElves.Core.Abstractions;
 
 namespace TrollsVsElves.Core.Components;
 
 public class GameObject : ITransient
 {
+    private List<Component> _components;
     private List<IDrawableComponent> _drawables;
     private List<IUpdateableComponent> _updateables;
 
+    public string Name { get; set; }
+
     public GameObject()
     {
+        _components = new List<Component>();
         _drawables = new List<IDrawableComponent>();
         _updateables = new List<IUpdateableComponent>();
     }
@@ -33,14 +39,31 @@ public class GameObject : ITransient
             _updateables.Add(updateable);
         }
 
+        _components.Add(component);
         return component;
     }
+
+    public T GetComponent<T>() where T : Component
+    {
+        var type = typeof(T);
+
+        foreach (var component in _components)
+        {
+            if (component.GetType() == type)
+            {
+                return component as T;
+            }
+        }
+
+        throw new Exception($"GameObject has no component of type {type}");
+    }
+
 
     public void Draw()
     {
         foreach (var item in _drawables)
         {
-            item.OnDraw();
+            item.Draw();
         }
 
         OnDraw();
@@ -50,7 +73,7 @@ public class GameObject : ITransient
     {
         foreach (var item in _updateables)
         {
-            item.OnUpdate(deltaTime);
+            item.Update(deltaTime);
         }
 
         OnUpdate(deltaTime);

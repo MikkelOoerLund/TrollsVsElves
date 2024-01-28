@@ -2,5 +2,5 @@
 
 public interface IUpdateableComponent
 {
-    void OnUpdate(float deltaTime);
+    void Update(float deltaTime);
 }

@@ -3,7 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
+using System;
 using TrollsVsElves.Core;
+using TrollsVsElves.Core.Components;
 using TrollsVsElves.Core.Extensions;
 using TrollsVsElves.Core.Services;
 using TrollsVsElves.Scripts.GameObjects;
@@ -54,6 +56,7 @@ public class Scene : Game
             .AddSingletonServices();
 
         _serviceCollection
+            .AddTransient<InputHandlerExample>()
             .AddTransientServices();
 
         base.Initialize();
@@ -78,7 +81,26 @@ public class Scene : Game
 
         _spriteBatch = provider.GetRequiredService<SpriteBatch>();
         _inputHandler = provider.GetRequiredService<InputHandlerService>();
+
+        var singletonGameObjectContainer = CreateSingletonGameObjectContainer(provider);
+        _gameObjectCollection.AddGameObject(singletonGameObjectContainer);
+
+        provider.GetRequiredService<InputHandlerExample>().Setup();
     }
+
+    private static GameObject CreateSingletonGameObjectContainer(IServiceProvider provider)
+    {
+        var gameObject = provider.GetRequiredService<GameObject>();
+
+        gameObject.Name = "SingletonContainer";
+
+        gameObject
+            .AddComponent(provider.GetRequiredService<InputHandlerComponent>());
+
+        return gameObject;
+    }
+
+
 
     protected override void Update(GameTime gameTime)
     {
@@ -90,6 +112,8 @@ public class Scene : Game
         _inputHandler.KeyboardState = Keyboard.GetState();
         _inputHandler.MouseState = Mouse.GetState();
         _gameObjectCollection.Update(deltaTime);
+
+        Input.Update();
 
         _collisionComponent.Update(gameTime);
 
